@@ -30,7 +30,7 @@ Given passenger demographics, travel details, and service ratings, can we accura
 
 | Property | Value |
 |---|---|
-| **File** | `airline_satisfaction_data.csv` |
+| **File** | `airline_satisfaction_data.csv` (https://drive.google.com/file/d/1y06clgsbrpjnEO5QVB-1hR3Ea_ZwFBCl/view?usp=drivesdk) |
 | **Records** | 58,313 passengers |
 | **Features** | 22 columns |
 | **Target** | `satisfaction` (Boolean → `satisfied` / `neutral or dissatisfied`) |
@@ -214,15 +214,18 @@ Use the **sidebar** to navigate between the four pages and apply demographic/fli
 ## 📎 Dataset Source
 
 - **Dataset:** Airline Passenger Satisfaction  
-- **Source:** [Kaggle – Airline Passenger Satisfaction](https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction)  
+- **Source:** (https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction)  
 - **License:** Public domain / educational use
 
 ---
 
 ## 👤 Author
 
+**Ram Kumar G**
 **Airline Satisfaction Analytics Project**  
-Data Analytics & Machine Learning | Internship/College Submission  
+**LinkedIn:** Ram Kumar G(www.linkedin.com/in/ramkumar-g-245685302)
+**Email:** ramkumar91847@gmail.com  
+  
 
 ---
 
