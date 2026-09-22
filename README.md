@@ -214,16 +214,16 @@ Use the **sidebar** to navigate between the four pages and apply demographic/fli
 ## 📎 Dataset Source
 
 - **Dataset:** Airline Passenger Satisfaction  
-- **Source:** (https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction)  
+- **Source:** [Dataset](https://drive.google.com/file/d/1y06clgsbrpjnEO5QVB-1hR3Ea_ZwFBCl/view?usp=drivesdk)  
 - **License:** Public domain / educational use
 
 ---
 
 ## 👤 Author
 
-**Ram Kumar G**
-**Airline Satisfaction Analytics Project**  
-**LinkedIn:** Ram Kumar G(www.linkedin.com/in/ramkumar-g-245685302)
+**Ram Kumar G** <br>
+**Airline Satisfaction Analytics Project** <br>
+**LinkedIn:** [Ram Kumar G](https://www.linkedin.com/in/ramkumar-g-245685302?utm_source=share_via&utm_content=profile&utm_medium=member_android) <br>
 **Email:** ramkumar91847@gmail.com  
   
 
