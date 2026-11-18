@@ -47,7 +47,7 @@ RATING_COLS = [
     "Checkin service", "Cleanliness",
 ]
 SEED = 42
-ACTIVE_THEME = "Light"
+ACTIVE_THEME = "Dark"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # DATA LOADING & PREPROCESSING
@@ -479,37 +479,76 @@ def main():
                      width=80)
     st.sidebar.title("✈️ Airline Satisfaction")
     st.sidebar.caption("Passenger insights & prediction")
-    theme = st.sidebar.radio("🎨 Appearance", ["Light", "Dark"], horizontal=True, key="dashboard_theme")
     global ACTIVE_THEME
-    ACTIVE_THEME = theme
+    ACTIVE_THEME = "Dark"
 
-    # Theme-aware styling: affects presentation only; analytics and models stay unchanged.
-    if theme == "Dark":
-        page_bg, panel, text, muted = "#0b1220", "#172235", "#f3f6fc", "#aab7cc"
-        border, accent, card = "#2b3a52", "#60a5fa", "#172a43"
-    else:
-        page_bg, panel, text, muted = "#f4f7fb", "#ffffff", "#172033", "#64748b"
-        border, accent, card = "#e2e8f0", "#2563eb", "#edf4ff"
+    # Dark glassmorphism styling with an aviation background. Presentation only;
+    # data processing, models, metrics, and prediction logic remain unchanged.
+    page_bg = "#071426"
+    panel = "rgba(8, 24, 45, 0.76)"
+    text = "#f4f8ff"
+    muted = "#c1d0e2"
+    border = "rgba(173, 213, 245, 0.28)"
+    accent = "#38bdf8"
+    card = "rgba(14, 42, 70, 0.70)"
 
-    st.markdown(f"""
+    st.markdown("""
     <style>
-      [data-testid="stAppViewContainer"] {{ background: {page_bg}; color: {text}; }}
-      [data-testid="stHeader"] {{ background: transparent; }}
-      [data-testid="stSidebar"] {{ background: {panel}; border-right: 1px solid {border}; }}
-      [data-testid="stSidebar"] * {{ color: {text}; }}
-      .block-container {{ padding-top: 2rem; padding-bottom: 3rem; max-width: 1500px; }}
-      h1, h2, h3 {{ color: {text} !important; letter-spacing: -0.025em; }}
-      p, label, [data-testid="stMarkdownContainer"] {{ color: {text}; }}
-      [data-testid="stCaptionContainer"] {{ color: {muted}; }}
-      .metric-card {{ background: linear-gradient(135deg, {card}, {panel}); border: 1px solid {border}; border-left: 4px solid {accent}; border-radius: 14px; padding: 18px 16px; min-height: 108px; box-shadow: 0 5px 18px rgba(15,23,42,.07); }}
-      .metric-card h4 {{ color: {muted}; font-size: 12px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 9px 0; }}
-      .metric-card h2 {{ color: {text}; font-size: 25px; font-weight: 750; margin: 0; }}
-      .section-header {{ background: linear-gradient(90deg, {accent}, #0ea5e9); color: white !important; padding: 11px 16px; border-radius: 10px; font-size: 16px; font-weight: 700; margin: 22px 0 14px 0; box-shadow: 0 4px 12px rgba(37,99,235,.14); }}
-      .predict-box {{ background: {panel}; border: 1px solid {border}; border-radius: 14px; padding: 22px; }}
-      [data-testid="stDataFrame"], [data-testid="stTable"] {{ border: 1px solid {border}; border-radius: 10px; overflow: hidden; }}
-      div.stButton > button {{ border-radius: 10px; font-weight: 650; padding: .55rem 1.1rem; }}
-      [data-testid="stMetric"] {{ background: {panel}; border: 1px solid {border}; border-radius: 12px; padding: 14px; }}
-      hr {{ border-color: {border}; }}
+      :root { color-scheme: dark; }
+      [data-testid="stAppViewContainer"] {
+        background-color: #071426;
+        background-image: linear-gradient(115deg, rgba(3, 13, 28, .86), rgba(5, 22, 43, .62)),
+          url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2400&q=85");
+        background-size: cover; background-position: center; background-attachment: fixed;
+      }
+      [data-testid="stHeader"] { background: rgba(3, 13, 28, .18); }
+      [data-testid="stSidebar"] {
+        background: rgba(5, 20, 39, .78);
+        border-right: 1px solid rgba(173, 213, 245, .25);
+        backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      }
+      [data-testid="stSidebar"] * { color: #f4f8ff; }
+      .block-container { padding-top: 2rem; padding-bottom: 3rem; max-width: 1500px; }
+      h1, h2, h3, h4 { color: #f4f8ff !important; letter-spacing: -.025em; }
+      p, label, [data-testid="stMarkdownContainer"] { color: #e7f0fb; }
+      [data-testid="stCaptionContainer"] { color: #c1d0e2; }
+      [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"] { gap: 1rem; }
+      .metric-card, [data-testid="stMetric"] {
+        background: linear-gradient(135deg, rgba(22, 58, 91, .76), rgba(7, 25, 47, .72));
+        border: 1px solid rgba(173, 213, 245, .30); border-radius: 18px;
+        padding: 17px 16px; box-shadow: 0 10px 30px rgba(0,0,0,.22);
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      }
+      .metric-card { border-left: 3px solid #38bdf8; min-height: 108px; }
+      .metric-card h4 { color: #c1d0e2; font-size: 12px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 9px; }
+      .metric-card h2 { color: #fff; font-size: 25px; font-weight: 750; margin: 0; }
+      .section-header {
+        background: linear-gradient(90deg, rgba(14, 116, 184, .88), rgba(8, 145, 178, .76));
+        color: white !important; padding: 11px 16px; border: 1px solid rgba(186,230,253,.24);
+        border-radius: 13px; font-size: 16px; font-weight: 700; margin: 22px 0 14px;
+        box-shadow: 0 8px 24px rgba(2, 132, 199, .18);
+      }
+      .predict-box {
+        background: rgba(8, 24, 45, .72); border: 1px solid rgba(173,213,245,.28);
+        border-radius: 18px; padding: 22px; backdrop-filter: blur(16px);
+      }
+      [data-testid="stDataFrame"], [data-testid="stTable"] {
+        border: 1px solid rgba(173,213,245,.28); border-radius: 12px; overflow: hidden;
+      }
+      div.stButton > button {
+        border-radius: 11px; font-weight: 650; padding: .55rem 1.1rem;
+        background: rgba(14, 116, 184, .78); color: white; border: 1px solid rgba(186,230,253,.3);
+      }
+      div.stButton > button:hover { background: rgba(2, 132, 199, .95); border-color: #7dd3fc; color: white; }
+      [data-testid="stSelectbox"] > div > div, [data-testid="stMultiSelect"] > div > div,
+      [data-testid="stTextInput"] input, [data-testid="stNumberInput"] input {
+        background: rgba(8, 24, 45, .78); color: white; border-color: rgba(173,213,245,.3);
+      }
+      [data-testid="stSlider"] [role="slider"] { background: #38bdf8; }
+      hr { border-color: rgba(173,213,245,.25); }
+      [data-testid="stAlert"] { background: rgba(8,24,45,.82); backdrop-filter: blur(12px); }
+      /* Keep chart panels readable while allowing the airplane to remain visible around them. */
+      [data-testid="stPlotlyChart"], [data-testid="stImage"] { border-radius: 14px; }
     </style>
     """, unsafe_allow_html=True)
     st.sidebar.markdown("---")
