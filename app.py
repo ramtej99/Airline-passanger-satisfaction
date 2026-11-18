@@ -47,6 +47,7 @@ RATING_COLS = [
     "Checkin service", "Cleanliness",
 ]
 SEED = 42
+ACTIVE_THEME = "Light"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # DATA LOADING & PREPROCESSING
@@ -171,16 +172,24 @@ def fig_to_buffer(fig):
 
 
 def set_style():
+    """Apply chart styling that matches the selected dashboard theme."""
+    dark = ACTIVE_THEME == "Dark"
     plt.rcParams.update({
-        "figure.facecolor": "white",
-        "axes.facecolor": "#f8f9fa",
-        "axes.edgecolor": "#dee2e6",
+        "figure.facecolor": "#111827" if dark else "white",
+        "axes.facecolor": "#1f2937" if dark else "#f8f9fa",
+        "axes.edgecolor": "#475569" if dark else "#dee2e6",
+        "axes.labelcolor": "#e5e7eb" if dark else "#343a40",
+        "text.color": "#f3f4f6" if dark else "#212529",
+        "xtick.color": "#d1d5db" if dark else "#495057",
+        "ytick.color": "#d1d5db" if dark else "#495057",
+        "axes.titlecolor": "#f9fafb" if dark else "#212529",
         "axes.grid": True,
-        "grid.color": "#e9ecef",
+        "grid.color": "#374151" if dark else "#e9ecef",
         "grid.linestyle": "--",
         "grid.linewidth": 0.6,
         "font.family": "sans-serif",
         "font.size": 11,
+        "savefig.facecolor": "#111827" if dark else "white",
     })
 
 
@@ -462,36 +471,6 @@ def main():
         initial_sidebar_state="expanded",
     )
 
-    # ── Custom CSS ──────────────────────────────────────────────────────────
-    st.markdown("""
-    <style>
-    .metric-card {
-        background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
-        border-left: 4px solid #3b82d4;
-        border-radius: 8px;
-        padding: 16px 20px;
-        margin: 4px 0;
-    }
-    .metric-card h4 { color: #57606a; font-size: 13px; margin: 0 0 4px 0; }
-    .metric-card h2 { color: #1f2328; font-size: 26px; margin: 0; }
-    .section-header {
-        background: #3b82d4;
-        color: white;
-        padding: 10px 18px;
-        border-radius: 6px;
-        font-size: 18px;
-        font-weight: 700;
-        margin: 20px 0 14px 0;
-    }
-    .predict-box {
-        background: #f7f8fa;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        padding: 24px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
     # ── Load data ─────────────────────────────────────────────────────────
     df_full = load_data(DATA_PATH)
 
@@ -499,6 +478,40 @@ def main():
     st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Airplane_silhouette.svg/120px-Airplane_silhouette.svg.png",
                      width=80)
     st.sidebar.title("✈️ Airline Satisfaction")
+    st.sidebar.caption("Passenger insights & prediction")
+    theme = st.sidebar.radio("🎨 Appearance", ["Light", "Dark"], horizontal=True, key="dashboard_theme")
+    global ACTIVE_THEME
+    ACTIVE_THEME = theme
+
+    # Theme-aware styling: affects presentation only; analytics and models stay unchanged.
+    if theme == "Dark":
+        page_bg, panel, text, muted = "#0b1220", "#172235", "#f3f6fc", "#aab7cc"
+        border, accent, card = "#2b3a52", "#60a5fa", "#172a43"
+    else:
+        page_bg, panel, text, muted = "#f4f7fb", "#ffffff", "#172033", "#64748b"
+        border, accent, card = "#e2e8f0", "#2563eb", "#edf4ff"
+
+    st.markdown(f"""
+    <style>
+      [data-testid="stAppViewContainer"] {{ background: {page_bg}; color: {text}; }}
+      [data-testid="stHeader"] {{ background: transparent; }}
+      [data-testid="stSidebar"] {{ background: {panel}; border-right: 1px solid {border}; }}
+      [data-testid="stSidebar"] * {{ color: {text}; }}
+      .block-container {{ padding-top: 2rem; padding-bottom: 3rem; max-width: 1500px; }}
+      h1, h2, h3 {{ color: {text} !important; letter-spacing: -0.025em; }}
+      p, label, [data-testid="stMarkdownContainer"] {{ color: {text}; }}
+      [data-testid="stCaptionContainer"] {{ color: {muted}; }}
+      .metric-card {{ background: linear-gradient(135deg, {card}, {panel}); border: 1px solid {border}; border-left: 4px solid {accent}; border-radius: 14px; padding: 18px 16px; min-height: 108px; box-shadow: 0 5px 18px rgba(15,23,42,.07); }}
+      .metric-card h4 {{ color: {muted}; font-size: 12px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 9px 0; }}
+      .metric-card h2 {{ color: {text}; font-size: 25px; font-weight: 750; margin: 0; }}
+      .section-header {{ background: linear-gradient(90deg, {accent}, #0ea5e9); color: white !important; padding: 11px 16px; border-radius: 10px; font-size: 16px; font-weight: 700; margin: 22px 0 14px 0; box-shadow: 0 4px 12px rgba(37,99,235,.14); }}
+      .predict-box {{ background: {panel}; border: 1px solid {border}; border-radius: 14px; padding: 22px; }}
+      [data-testid="stDataFrame"], [data-testid="stTable"] {{ border: 1px solid {border}; border-radius: 10px; overflow: hidden; }}
+      div.stButton > button {{ border-radius: 10px; font-weight: 650; padding: .55rem 1.1rem; }}
+      [data-testid="stMetric"] {{ background: {panel}; border: 1px solid {border}; border-radius: 12px; padding: 14px; }}
+      hr {{ border-color: {border}; }}
+    </style>
+    """, unsafe_allow_html=True)
     st.sidebar.markdown("---")
 
     page = st.sidebar.radio(
